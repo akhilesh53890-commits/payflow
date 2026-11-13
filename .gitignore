@@ -1,0 +1,62 @@
+# Git Ignore for PayFlow Platform
+# Compiled class files & build directories
+**/target/
+**/bin/
+**/*.class
+
+# Package files
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Tools directory (local maven, portable jdk)
+tools/
+
+# Virtual Machine crash logs
+hs_err_pid*
+replay_pid*
+
+# Logs
+logs/
+*.log
+
+# Environment files with secrets
+.env
+!.env.example
+
+# IDE specific files
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.classpath
+.project
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# Node / Frontend
+**/node_modules/
+**/dist/
+frontend/dist/
+frontend/build/
+.npm
+.eslintcache
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Test and coverage output
+**/coverage/
+.nyc_output/
+*.lcov
+test-results/
+
+# k6 test results
+test-output/
+

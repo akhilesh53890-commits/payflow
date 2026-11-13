@@ -1,0 +1,64 @@
+server:
+  port: ${SERVER_PORT:8080}
+  shutdown: graceful
+
+spring:
+  application:
+    name: payflow
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+  lifecycle:
+    timeout-per-shutdown-phase: 15s
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: false
+        jdbc:
+          batch_size: 25
+          order_inserts: true
+          order_updates: true
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+
+payflow:
+  security:
+    jwt:
+      secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+      access-token-expiration-seconds: ${JWT_ACCESS_TOKEN_EXPIRATION_SECONDS:900}
+      refresh-token-expiration-seconds: ${JWT_REFRESH_TOKEN_EXPIRATION_SECONDS:604800}
+    api-key:
+      pepper: ${API_KEY_PEPPER:d7a31b4e9f284c0cbb91a5823e59f42589e4726c518fb901763efc814032d917}
+  outbox:
+    batch-size: ${OUTBOX_PUBLISH_BATCH_SIZE:50}
+    poll-interval-ms: ${OUTBOX_POLL_INTERVAL_MS:1000}
+    max-retries: ${OUTBOX_MAX_RETRIES:5}
+  webhook:
+    timeout-ms: ${WEBHOOK_DELIVERY_TIMEOUT_MS:5000}
+    max-retries: ${WEBHOOK_MAX_RETRIES:4}
+    backoff-initial-delay-ms: ${WEBHOOK_BACKOFF_INITIAL_DELAY_MS:2000}
+    backoff-multiplier: ${WEBHOOK_BACKOFF_MULTIPLIER:2.0}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when_authorized
+      probes:
+        enabled: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+

@@ -1,0 +1,13 @@
+package com.payflow.eventing.repository;
+
+import com.payflow.eventing.domain.OutboxEvent;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface OutboxEventRepository extends JpaRepository<OutboxEvent, String> {
+    List<OutboxEvent> findByStatusOrderByCreatedAtAsc(String status, Pageable pageable);
+    long countByStatus(String status);
+}
+

@@ -1,0 +1,67 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 1,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "title": "Payment Volume by Status",
+      "type": "stat",
+      "gridPos": { "h": 6, "w": 6, "x": 0, "y": 0 },
+      "targets": [
+        { "expr": "sum by (status) (payflow_payments_total)", "legendFormat": "{{status}}" }
+      ]
+    },
+    {
+      "title": "Payment Success Rate (%)",
+      "type": "gauge",
+      "gridPos": { "h": 6, "w": 6, "x": 6, "y": 0 },
+      "targets": [
+        { "expr": "sum(payflow_payments_total{status=\"SUCCEEDED\"}) / sum(payflow_payments_total) * 100", "legendFormat": "Success Rate" }
+      ]
+    },
+    {
+      "title": "Transactional Outbox Backlog",
+      "type": "stat",
+      "gridPos": { "h": 6, "w": 6, "x": 12, "y": 0 },
+      "targets": [
+        { "expr": "payflow_outbox_backlog_total", "legendFormat": "Pending Events" }
+      ]
+    },
+    {
+      "title": "Webhook Delivery Failures",
+      "type": "stat",
+      "gridPos": { "h": 6, "w": 6, "x": 18, "y": 0 },
+      "targets": [
+        { "expr": "sum(payflow_webhook_deliveries_total{status=\"FAILED\"})", "legendFormat": "Failed Deliveries" }
+      ]
+    },
+    {
+      "title": "Payment Latency (p95 / p99)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 6 },
+      "targets": [
+        { "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{uri=~\"/api/v1/payments.*\"}[1m])) by (le))", "legendFormat": "p95 Latency" },
+        { "expr": "histogram_quantile(0.99, sum(rate(http_server_requests_seconds_bucket{uri=~\"/api/v1/payments.*\"}[1m])) by (le))", "legendFormat": "p99 Latency" }
+      ]
+    },
+    {
+      "title": "Ledger Balance Discrepancies",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 6 },
+      "targets": [
+        { "expr": "payflow_ledger_discrepancies_total", "legendFormat": "Ledger Discrepancies" }
+      ]
+    }
+  ],
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["payflow", "fintech"],
+  "time": { "from": "now-1h", "to": "now" },
+  "title": "PayFlow Platform Overview",
+  "uid": "payflow-overview"
+}
+
